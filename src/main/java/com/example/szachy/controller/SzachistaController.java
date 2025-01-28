@@ -34,4 +34,20 @@ public class SzachistaController {
         redirectAttributes.addFlashAttribute("message", "Szachista dodany pomyślnie");
         return "redirect:/";
     }
+
+    @GetMapping("/usun/{id}")
+    public String usunSzachiste(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        Szachista szachista = szachistaRepository.findById(id).orElse(null);
+        szachistaRepository.delete(szachista);
+        redirectAttributes.addFlashAttribute("message", "Szachista usunięty pomyślnie");
+        return "redirect:/";
+    }
+
+    @GetMapping("/edytuj/{id}")
+    public String pokazFormularzEdycji(@PathVariable("id") Long id, Model model){
+        Szachista szachista = szachistaRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("Nieprawidłowe ID szachisty " + id));
+        model.addAttribute("szachista", szachista);
+        return "formularz";
+    }
 }
